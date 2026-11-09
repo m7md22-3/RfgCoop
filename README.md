@@ -1,11 +1,11 @@
 # RFG Coop
 
-Online co-op through the main Red Faction Guerrilla Re-Mars-tered campaign (Tharsis): two players in one world,
-seeing each other, driving, fighting, destroying and doing missions together.
+Online co-op through the main Red Faction Guerrilla Re-Mars-tered campaign (Tharsis). The goal: two players in one
+world, seeing each other, driving, fighting, destroying and doing missions together.
 
 Status: **no longer developed by the author.** It is left to the community; forks are welcome. The last build is
-ver7.2 (shared world, partner puppets, missions, destruction sync) and it was never tested in game. See MODLOG.md
-and the known issues below.
+ver7.2 (shared world, partner puppets, destruction sync; missions don't sync yet) and it was never tested in game.
+See MODLOG.md and the known issues below.
 
 - Target: the GOG build (32-bit rfg.exe + rfg.pdb).
 - Build: `build.cmd` with llvm-mingw (set `CXX` to its i686 clang++). Install: copy `build\xinput1_3.dll` and
@@ -13,6 +13,7 @@ and the known issues below.
 - `research/RESEARCH.md`: the main report (feasibility, architecture, roadmap).
 - `research/notes/*.md`: verified facts per domain.
 - Networking: [ENet](http://enet.bespin.org/) (MIT, `third_party/enet`).
+- License: MIT, see `LICENSE`.
 
 ## Known issues
 
@@ -22,6 +23,7 @@ and the known issues below.
     host's destruction stream (`OnRfgl`, `src/destruction.cpp`).
   - [#2](https://github.com/m7md22-3/RfgCoop/issues/2): the partner's weapon slot reaches the game's inventory calls
     unchecked (`Effects` / `GiveWeapon`, `src/puppet.cpp`).
+- **Missions:** they don't sync yet.
 - **Debris:** holes and destruction sync on both screens (ver7.1), but loose debris pieces still differ between the two
   games.
 - **Untested build:** ver7.2 (safehouse repair on both, gas tanks, host re-join log) has never run in game. The last
