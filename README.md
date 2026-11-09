@@ -37,10 +37,12 @@ ver6. ver7.2 builds on that and is untested.
 
 ### Build and install
 
-1. Get llvm-mingw for Windows from its GitHub releases (a `ucrt-x86_64` zip; it also contains the 32-bit compilers).
-   Either unzip it and rename its folder so that `tools\llvm-mingw\bin\i686-w64-mingw32-clang++.exe` sits beside
-   `build.cmd`, or set `CXX` to the full path of that exe (no quotes) in the cmd window you build from.
-2. Run `build.cmd`. It ends with `Built build\xinput1_3.dll`.
+1. Get llvm-mingw for Windows from [its releases](https://github.com/mstorsjo/llvm-mingw/releases): the
+   `ucrt-x86_64` zip (it also contains the 32-bit compilers). Make a `tools` folder next to `build.cmd` and unzip it
+   there, so you get `tools\llvm-mingw-<version>-ucrt-x86_64\bin\i686-w64-mingw32-clang++.exe`. There's no need to
+   rename it. Or set `CXX` to the full path of that exe (no quotes) in the cmd window you build from.
+2. Run `build.cmd` (double-clicking works: the window stays open at the end). It prints the compiler it found and
+   ends with `Built build\xinput1_3.dll`. If it says `Compiler not found`, step 1 isn't done yet.
 3. Copy `build\xinput1_3.dll` and `RfgCoop.ini` into the folder that holds `rfg.exe`.
 4. Start the game. `RfgCoop.log` in that folder should say `build OK` and `session: role host` (or `guest`). In
    windowed mode, the window title gains `[RfgCoop <tag>]`. If there is no log at all, the DLL isn't loaded: check the
@@ -183,6 +185,7 @@ at each game start; the previous run is kept as `RfgCoop.prev.log`. When a sessi
 CONNECT in the box), each game logs `session: handshake values: ...`. Compare that line in both logs to find a
 mismatch.
 
+- `build.cmd` says `Compiler not found`: llvm-mingw isn't in `tools\` (see Build and install) and `CXX` isn't set.
 - F8 does nothing: you are not in gameplay on a loaded save.
 - `set role=host or role=guest` / `set connect=<ip:port>`: fix the ini and restart the game.
 - `Co-op needs a save that has finished the Tutorial` (or `session stopped: the host's save has not finished the
