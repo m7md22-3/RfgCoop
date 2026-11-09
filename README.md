@@ -3,6 +3,9 @@
 Online co-op through the main Red Faction Guerrilla Re-Mars-tered campaign (Tharsis). The goal: two players in one
 world, seeing each other, driving, fighting, destroying and doing missions together.
 
+Made with AI: the code and docs were written by Claude (Anthropic) under the author's direction. The author set the
+goals and the co-op rules and tested the builds in game.
+
 Status: **no longer developed by the author.** It is left to the community; forks are welcome. The last build is
 ver7.2 (shared world, partner puppets, destruction sync; missions don't sync yet) and it was never tested in game.
 See MODLOG.md and the known issues below.
@@ -166,7 +169,10 @@ What doesn't sync:
   `Your world misses the host's changes...`. It re-syncs when the mission ends.
 - Vehicles: the partner's puppet hides while it drives, but the star still shows where it is.
 - NPCs: each game runs its own.
-- Time of day after the join, and district control.
+- Time of day: the guest gets the host's time at the join and at every re-join, but in between the two clocks run
+  separately and can drift apart (for example while only the guest is paused).
+- Weather: not synced.
+- District control.
 
 Ending: F8 stops the session. If the guest stops, the host goes back to listening. If the host stops or drops, the
 guest shows `gone, reconnecting` and keeps dialling until it presses F8. A guest that quits to the main menu ends the
@@ -243,6 +249,7 @@ files from a `save_tag=1` copy stay behind.
   - [#2](https://github.com/m7md22-3/RfgCoop/issues/2): the partner's weapon slot reaches the game's inventory calls
     unchecked (`Effects` / `GiveWeapon`, `src/puppet.cpp`).
 - **Missions:** they don't sync yet.
+- **Time and weather:** time of day syncs only at the join and at re-joins; weather doesn't sync.
 - **Debris:** holes and destruction sync on both screens (ver7.1), but loose debris pieces still differ between the two
   games.
 - **Untested build:** ver7.2 (safehouse repair on both, gas tanks, host re-join log) has never run in game. The last
