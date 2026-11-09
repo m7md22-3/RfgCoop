@@ -8,7 +8,8 @@ ver7.2 (shared world, partner puppets, destruction sync; missions don't sync yet
 See MODLOG.md and the known issues below.
 
 - Target: the GOG build (32-bit rfg.exe).
-- Build, install and play: see [How to use](#how-to-use). `RfgCoop.ini` explains every key.
+- Download: [Releases](https://github.com/m7md22-3/RfgCoop/releases) (prebuilt `xinput1_3.dll` plus host and guest inis). Install and play: see
+  [How to use](#how-to-use). `RfgCoop.ini` explains every key.
 - `research/RESEARCH.md`: the main report (feasibility, architecture, roadmap).
 - `research/notes/*.md`: verified facts per domain.
 - Networking: [ENet](http://enet.bespin.org/) (MIT, `third_party/enet`).
@@ -25,7 +26,9 @@ ver6. ver7.2 builds on that and is untested.
   says `rfg.exe build not recognised`) and the game runs as normal. You don't need `rfg.pdb`; the mod never reads it.
 - The same game data on both PCs: the same `data\*.vpp_pc` files (same names and sizes). Also the same `winmm.dll` /
   `dinput8.dll` in the game folder: identical files on both, or none on both.
-- The exact same `xinput1_3.dll` file. Both games compare its bytes, so one player builds it and sends it to the other.
+- The exact same `xinput1_3.dll` file on both PCs. Both games compare its bytes, and every build comes out different,
+  so both players download the same release zip. If you build it yourself, send your file to your partner: two
+  separate builds are refused (`different RfgCoop build`).
 - Host: a main-campaign save that has finished the Tutorial (a DLC level fails this check).
 - Guest: a save that loads into free roam. A new game starts inside the Tutorial mission, which the guest's F8 refuses,
   so play past it first. The host's world replaces yours. From the link until you restart, your game writes no saves
@@ -35,18 +38,28 @@ ver6. ver7.2 builds on that and is untested.
   (the ver6 two-PC test used Radmin). A port forwarded on the host's router should also work, but that is untested.
   Game traffic is not encrypted, so play only with people you trust. Tailscale and ZeroTier encrypt the link.
 
-### Build and install
+### Install (both players)
+
+1. Both players download the same `RfgCoop-ver7.2.zip` from [Releases](https://github.com/m7md22-3/RfgCoop/releases) and unzip it.
+2. Host: copy `xinput1_3.dll` and `Host\RfgCoop.ini` into the folder that holds `rfg.exe`. Guest: copy
+   `xinput1_3.dll` and `Guest\RfgCoop.ini` there, then set `connect=` to the host's address (see Guest setup).
+3. Start the game. `RfgCoop.log` in that folder should say `build OK` and `session: role host` (or `guest`). In
+   windowed mode, the window title gains `[RfgCoop <tag>]`. If there is no log at all, the DLL isn't loaded: check the
+   name `xinput1_3.dll` and that it sits beside `rfg.exe`.
+
+### Build from source (modders)
+
+Only needed if you change the code. Players use the release.
 
 1. Get llvm-mingw for Windows from [its releases](https://github.com/mstorsjo/llvm-mingw/releases): the
    `ucrt-x86_64` zip (it also contains the 32-bit compilers). Make a `tools` folder next to `build.cmd` and unzip it
    there, so you get `tools\llvm-mingw-<version>-ucrt-x86_64\bin\i686-w64-mingw32-clang++.exe`. There's no need to
    rename it. Or set `CXX` to the full path of that exe (no quotes) in the cmd window you build from.
 2. Run `build.cmd` (double-clicking works: the window stays open at the end). It prints the compiler it found and
-   ends with `Built build\xinput1_3.dll`. If it says `Compiler not found`, step 1 isn't done yet.
-3. Copy `build\xinput1_3.dll` and `RfgCoop.ini` into the folder that holds `rfg.exe`.
-4. Start the game. `RfgCoop.log` in that folder should say `build OK` and `session: role host` (or `guest`). In
-   windowed mode, the window title gains `[RfgCoop <tag>]`. If there is no log at all, the DLL isn't loaded: check the
-   name `xinput1_3.dll` and that it sits beside `rfg.exe`.
+   ends with `Built build\xinput1_3.dll`. If it says `Compiler not found`, step 1 isn't done yet. If it stops at a
+   Windows header with `file not found` (e.g. `joystickapi.h`), the llvm-mingw unzip is incomplete: extract it again.
+3. Install `build\xinput1_3.dll` as in Install, with the inis from `vers\ver7.2\TwoPCs\Host` and `Guest` (the same as
+   the release zip's). Send that same DLL to your partner: a build of their own won't match yours.
 
 ### Host setup
 
@@ -83,7 +96,7 @@ password=
 name=YourName
 ```
 
-`vers/ver7.2/TwoPCs/Host` and `vers/ver7.2/TwoPCs/Guest` hold ready-made inis for this. `autoconnect=1` tries to start
+The release zip's `Host` and `Guest` folders (also `vers/ver7.2/TwoPCs/`) hold ready-made inis for this. `autoconnect=1` tries to start
 the session once, by itself, on the first gameplay frame. If that is refused, press F8 later. On a guest, autoconnect
 skips the picker, so you keep the host's hammer and backpack.
 
@@ -185,7 +198,7 @@ at each game start; the previous run is kept as `RfgCoop.prev.log`. When a sessi
 CONNECT in the box), each game logs `session: handshake values: ...`. Compare that line in both logs to find a
 mismatch.
 
-- `build.cmd` says `Compiler not found`: llvm-mingw isn't in `tools\` (see Build and install) and `CXX` isn't set.
+- `build.cmd` says `Compiler not found`: llvm-mingw isn't in `tools\` (see Build from source) and `CXX` isn't set.
 - F8 does nothing: you are not in gameplay on a loaded save.
 - `set role=host or role=guest` / `set connect=<ip:port>`: fix the ini and restart the game.
 - `Co-op needs a save that has finished the Tutorial` (or `session stopped: the host's save has not finished the
@@ -235,4 +248,3 @@ files from a `save_tag=1` copy stay behind.
 - **Untested build:** ver7.2 (safehouse repair on both, gas tanks, host re-join log) has never run in game. The last
   two-PC test was ver6, over a virtual LAN.
 - **Official multiplayer:** "Find game" fails while RfgCoop is installed. Remove `xinput1_3.dll` to play online.
-- **No prebuilt DLL:** build it with `build.cmd`.
